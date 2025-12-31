@@ -1,3 +1,8 @@
+.ejs-gamepad .btn-x,
+.ejs-gamepad .btn-y,
+.ejs-gamepad .btn-z {
+  display: none !important;
+}
 .ejs_parent {
     background: #000;
     overflow: hidden;
