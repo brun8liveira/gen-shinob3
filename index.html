@@ -1,24 +1,45 @@
 ```html
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Shinob3</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<title>Shinobi 3</title>
+
+<!-- CONFIGURAÇÃO EMULATORJS -->
 <script>
     EJS_player = "#game";
+
+    // Mega Drive
     EJS_core = "segaMD";
+
+    // ROM
     EJS_gameUrl = "roms/shinob3.bin";
-    EJS_pathtodata = "https://cdn.emulatorjs.org/latest/data/";
+
+    // Dados locais do EmulatorJS
+    EJS_pathtodata = "data/";
+
+    // Identificação exclusiva do jogo
+    EJS_gameID = "shinobi3";
+    EJS_gameName = "Shinobi 3";
+
+    // Inicialização
     EJS_startOnLoaded = true;
     EJS_fullscreenOnLoaded = false;
 </script>
 
-<script src="https://cdn.emulatorjs.org/latest/data/loader.js"></script>
+<!-- LOADER LOCAL -->
+<script src="data/loader.js"></script>
 
 <style>
+
     html, body {
         margin: 0;
         background: black;
@@ -29,6 +50,7 @@
         touch-action: none;
     }
 
+    /* Área do jogo */
     #game {
         width: 100vw;
         height: 100vh;
@@ -40,14 +62,19 @@
         top: 8px;
         left: 8px;
         z-index: 20;
+
         background: rgba(0,0,0,0.6);
         color: white;
+
         border: 1px solid white;
         border-radius: 6px;
+
         padding: 6px 10px;
         font-size: 14px;
+
         cursor: pointer;
         user-select: none;
+
         display: none;
     }
 
@@ -55,86 +82,133 @@
     #overlay {
         position: fixed;
         inset: 0;
+
         background: rgba(0,0,0,0.85);
         color: white;
+
         font-size: 26px;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         text-align: center;
         z-index: 10;
+
         cursor: pointer;
         border-radius: 12px;
     }
 
+    /* Botão iniciar */
     #overlay span {
         padding: 18px 28px;
+
         background: #222;
         border: 2px solid white;
+
         border-radius: 10px;
     }
 
     #overlay:hover span {
         background: #333;
     }
+
 </style>
+
 </head>
 
 <body>
 
+<!-- TELA INICIAL -->
 <div id="overlay">
     <span>▶ TOCAR PARA JOGAR</span>
 </div>
 
-<div id="fullscreen-btn">⛶ Tela cheia</div>
+<!-- BOTÃO FULLSCREEN -->
+<div id="fullscreen-btn">
+    ⛶ Tela cheia
+</div>
 
+<!-- EMULADOR -->
 <div id="game"></div>
 
+
 <script>
+
     const overlay = document.getElementById("overlay");
     const fsBtn = document.getElementById("fullscreen-btn");
 
-    // Entrar em tela cheia
+
+    // ENTRAR EM TELA CHEIA
     async function enterFullscreen() {
+
         const el = document.documentElement;
 
         if (el.requestFullscreen) {
+
             try {
                 await el.requestFullscreen();
+
             } catch (e) {
                 console.log("Erro ao tentar fullscreen:", e);
             }
+
         }
     }
 
-    // Atualizar botão conforme o estado da tela
+
+    // ATUALIZAR BOTÃO FULLSCREEN
     function updateFullscreenButton() {
-        const isFullscreen = document.fullscreenElement != null;
-        fsBtn.style.display = isFullscreen ? "none" : "block";
+
+        const isFullscreen =
+            document.fullscreenElement != null;
+
+        fsBtn.style.display =
+            isFullscreen ? "none" : "block";
+
     }
 
-    document.addEventListener("fullscreenchange", updateFullscreenButton);
 
-    // Iniciar jogo
+    // DETECTAR MUDANÇA DE TELA
+    document.addEventListener(
+        "fullscreenchange",
+        updateFullscreenButton
+    );
+
+
+    // INICIAR JOGO
     overlay.addEventListener("click", async () => {
+
         overlay.remove();
+
         await enterFullscreen();
+
         updateFullscreenButton();
+
     });
 
-    // Botão para entrar novamente em tela cheia
+
+    // BOTÃO PARA ENTRAR NOVAMENTE EM TELA CHEIA
     fsBtn.addEventListener("click", async () => {
+
         await enterFullscreen();
+
         updateFullscreenButton();
+
     });
 
-    // Bloquear rolagem por gestos
-    window.addEventListener("touchmove", e => {
-        e.preventDefault();
-    }, { passive: false });
 
-    // Estado inicial
+    // BLOQUEAR ROLAGEM POR GESTOS
+    window.addEventListener(
+        "touchmove",
+        e => e.preventDefault(),
+        { passive: false }
+    );
+
+
+    // ESTADO INICIAL
     updateFullscreenButton();
+
 </script>
 
 </body>
